@@ -4,14 +4,6 @@ resource "random_password" "default" {
   length = 16
 }
 
-
-
-/*
-*  VPC 部分
-*/
-
-
-
 data "alicloud_vswitches" "default" {
   ids = [var.vswitch_id]
 }
@@ -38,23 +30,23 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
 */
 
 resource "alicloud_eci_container_group" "docker-register" {
-  container_group_name = "${var.name}"
-  cpu                  = 0.5
-  memory               = 1
-  restart_policy       = "Always"
-  security_group_id    = alicloud_security_group.default.id
-  vswitch_id           = var.vswitch_id
+  container_group_name   = var.name
+  cpu                    = 0.5
+  memory                 = 1
+  restart_policy         = "Always"
+  security_group_id      = alicloud_security_group.default.id
+  vswitch_id             = var.vswitch_id
   auto_match_image_cache = true
-  auto_create_eip = true
-  eip_bandwidth = 100
+  auto_create_eip        = true
+  eip_bandwidth          = 100
   containers {
     image             = "htid/registry:latest"
     name              = "registry-${var.name}"
     image_pull_policy = "IfNotPresent"
-    ports {
-      port     = 5000
-      protocol = "TCP"
-    }
+    # ports {
+    #   port     = 5000
+    #   protocol = "TCP"
+    # }
     ports {
       port     = 80
       protocol = "TCP"
@@ -64,7 +56,6 @@ resource "alicloud_eci_container_group" "docker-register" {
       name       = "config"
     }
   }
-
 
   volumes {
     name = "data"
@@ -86,18 +77,4 @@ resource "alicloud_eci_container_group" "docker-register" {
       path    = "htpasswd"
     }
   }
-
 }
-
-# resource "alicloud_eip" "image_cache" {
-#   internet_charge_type = "PayByTraffic"
-#   bandwidth            = "100"
-# }
-
-# resource "alicloud_eci_image_cache" "default" {
-#   image_cache_name  = "docker-register-${var.name}"
-#   images            = ["htid/registry:latest", "caddy:alpine"]
-#   security_group_id = alicloud_security_group.this.id
-#   vswitch_id        = data.alicloud_vswitches.this.vswitches.0.id
-#   eip_instance_id   = alicloud_eip.image_cache.id
-# }

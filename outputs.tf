@@ -3,7 +3,7 @@ output "public_ip" {
 }
 
 output "private_ip" {
-  value = alicloud_eci_container_group.docker-register.intranet_ip 
+  value = alicloud_eci_container_group.docker-register.intranet_ip
 }
 
 output "username" {
