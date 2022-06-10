@@ -1,6 +1,7 @@
-
-
 resource "random_password" "default" {
+    keepers = {
+        id   = var.name
+    }
   length = 16
 }
 
@@ -41,12 +42,9 @@ resource "alicloud_eci_container_group" "docker-register" {
   eip_bandwidth          = 100
   containers {
     image             = "htid/registry:latest"
-    name              = "registry-${var.name}"
+    name              = "docker-register"
     image_pull_policy = "IfNotPresent"
-    # ports {
-    #   port     = 5000
-    #   protocol = "TCP"
-    # }
+
     ports {
       port     = 80
       protocol = "TCP"
