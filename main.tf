@@ -53,6 +53,10 @@ resource "alicloud_eci_container_group" "docker-register" {
       mount_path = "/etc/docker/registry/"
       name       = "config"
     }
+    volume_mounts {
+      mount_path = "/var/lib/registry/"
+      name       = "data"
+    }
   }
 
   volumes {
