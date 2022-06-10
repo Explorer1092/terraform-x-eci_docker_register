@@ -3,7 +3,7 @@ locals {
 :80 {
         # tls liqianglau@outlook.com
         basicauth /* {
-          admin ${base64encode(random_password.default.bcrypt_hash)}
+          admin ${base64encode(nonsensitive(random_password.default.bcrypt_hash))}
         }
         reverse_proxy /v2/ 127.0.0.1:5000 {
                 header_up X-Forwarded-Proto {scheme}
@@ -14,7 +14,7 @@ locals {
 EOF
 
   htpasswd_config = <<EOF
-admin:${random_password.default.bcrypt_hash}
+admin:${nonsensitive(random_password.default.bcrypt_hash)}
 EOF
 
   registry_config = <<EOF
