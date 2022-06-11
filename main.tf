@@ -26,6 +26,7 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
   cidr_ip           = "0.0.0.0/0"
 }
 
+
 /*
 * 创建容器服务
 */
@@ -60,9 +61,12 @@ resource "alicloud_eci_container_group" "docker-register" {
   }
 
   volumes {
-    name = "data"
-    type = "EmptyDirVolume"
+    name              = "data"
+    type              = "NFSVolume"
+    nfs_volume_path   = "/"
+    nfs_volume_server = module.nas.this_mount_target_domain
   }
+
   volumes {
     name = "config"
     type = "ConfigFileVolume"

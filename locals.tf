@@ -21,7 +21,7 @@ EOF
 version: 0.1
 storage:
   filesystem:
-    rootdirectory: /var/lib/registry
+    rootdirectory: /var/lib/registry/
     maxthreads: 100
 auth:
   htpasswd:
