@@ -2,6 +2,7 @@ resource "random_password" "default" {
     keepers = {
         id   = var.name
     }
+    special = false
   length = 16
 }
 
